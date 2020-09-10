@@ -28,26 +28,27 @@ So, here as Google Colab Free GPU was used to do all pre-processing and training
 Here we have proposed U-Net and GhostUnet for our semnatic segmentation problem.
 
 # Dice Coefficient & Dice Coefficient Loss Function
+The Dice coefficient is a similarity measure function that is typically used to calculate the similarity of two samples
 
-Dice = 2* |X∩Y| / (|X|+|Y|)
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy80bE4xWE9ac2hmZkRRNUc1c0VDUTM3ekNzZXpzdDhaWFM2S0JRQW9OR09GS2pNVFQ3aWNhblFFeTNoUzN3czNpYlhWUG5EMWlhYjZpY1lqRE1BUEl4SnNQTmcvNjQw?x-oss-process=image/format,png)  
 
 Here |X| and |Y| are the cardinalities of the two sets (i.e. the number of elements in each set). The Sørensen index equals twice the number of elements common to both sets divided by the sum of the number of elements in each set.
 
 The implemeted python code for dice coefficient:-
+```
 
 def dice_coef(y_true, y_pred, epsilon=1e-6):
     intersection = K.sum(K.abs(y_true * y_pred), axis=-1)
     return (2. * intersection) / (K.sum(K.square(y_true),axis=-1) + K.sum(K.square(y_pred),axis=-1) + epsilon)
     
+```
+    
 In order to formulate a loss function which can be minimized, we'll simply use 1−dice_coef:-
 
+```
 def dice_coef_loss(y_true, y_pred):
     return 1-dice_coef(y_true, y_pred)
-    
-# Results
-Network model	   Global Dice%	      Iteration Numbers till converage
-U-Net	            93.10	            4750
-GhostUnet	        92.78	            5000
+ ```
+# Results and Discussion
 
-# Conclusions
 Both neural networks showed good automatic image segmentation ability, with U-Net having a global Dice of 93.1%, which was better than GhostUnet (92.78%); however, GhostUnet's Dice for automatic sketching of bladder was slightly higher than U-Net, which indicated that this network model might be useful to radiotherapy but not very effective at the moment, and at least it can achieve automatic segmentation of multiple organs.
